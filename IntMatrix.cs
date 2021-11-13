@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace MatrixOperations.BL
 {
@@ -6,8 +7,8 @@ namespace MatrixOperations.BL
     {
         public IntMatrix(int[,] elements) : base(elements) { }
         public IntMatrix(Matrix<int> matrix) : base(matrix.Elements) { }
-
         public IntMatrix(int width, int height) : base(width, height) { }
+        public IntMatrix(int width, int heigth, IEnumerable<int> source) : base(width, heigth, source) { }
 
         public static IntMatrix operator +(IntMatrix a, IntMatrix b)
         {

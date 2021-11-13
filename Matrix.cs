@@ -45,6 +45,19 @@ namespace MatrixOperations.BL
             _elements = new T[heigth, width];
         }
 
+        public Matrix(int width, int heigth, IEnumerable<T> source)
+        {
+            _elements = new T[heigth, width];
+            var sourceArray = source.ToArray();
+            for(int i = 0; i < heigth; i++)
+            {
+                for(int j = 0; j < width; j++)
+                {
+                    _elements[i, j] = sourceArray[i * width + j];
+                }
+            }
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             return _elements.OfType<T>().GetEnumerator();
