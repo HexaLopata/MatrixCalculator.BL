@@ -1,22 +1,23 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace MatrixOperations.BL
 {
-    public class IntMatrix : Matrix<int>
+    public class RealMatrix : Matrix<double>
     {
-        public IntMatrix Inversed
+        public RealMatrix Inversed
         {
             get
             {
                 var det = Determinant;
                 if (det == 0)
                     throw new ArgumentException("Обратной матрицы не существует, если определитель равен 0");
-                return (1 / det) * new IntMatrix(GetMatrixOfAlgebraicComplement().Transposed);
+                return (1 / det) * new RealMatrix(GetMatrixOfAlgebraicComplement().Transposed);
             }
         }
 
-        public int Determinant
+        public double Determinant
         {
             get
             {
@@ -25,7 +26,7 @@ namespace MatrixOperations.BL
                 if (Width == 1)
                     return this[0, 0];
 
-                int result = 0;
+                double result = 0;
 
                 for (int i = 0; i < Width; i++)
                 {
@@ -36,17 +37,17 @@ namespace MatrixOperations.BL
             }
         }
 
-        public IntMatrix(int[,] elements) : base(elements) { }
-        public IntMatrix(Matrix<int> matrix) : base(matrix.Elements) { }
-        public IntMatrix(int width, int height) : base(width, height) { }
-        public IntMatrix(int width, int heigth, IEnumerable<int> source) : base(width, heigth, source) { }
+        public RealMatrix(double[,] elements) : base(elements) { }
+        public RealMatrix(Matrix<double> matrix) : base(matrix.Elements) { }
+        public RealMatrix(int width, int height) : base(width, height) { }
+        public RealMatrix(int width, int heigth, IEnumerable<double> source) : base(width, heigth, source) { }
 
-        public static IntMatrix operator +(IntMatrix a, IntMatrix b)
+        public static RealMatrix operator +(RealMatrix a, RealMatrix b)
         {
             if (a.Height != b.Height || a.Width != b.Width)
                 throw new ArgumentException("Размеры матриц должны совпадать");
 
-            var result = new IntMatrix(a.Width, a.Height);
+            var result = new RealMatrix(a.Width, a.Height);
             for (int i = 0; i < a.Height; i++)
                 for (int j = 0; j < a.Width; j++)
                     result[i, j] = a[i, j] + b[i, j];
@@ -54,12 +55,12 @@ namespace MatrixOperations.BL
             return result;
         }
 
-        public static IntMatrix operator -(IntMatrix a, IntMatrix b)
+        public static RealMatrix operator -(RealMatrix a, RealMatrix b)
         {
             if (a.Height != b.Height || a.Width != b.Width)
                 throw new ArgumentException("Размеры матриц должны совпадать");
 
-            var result = new IntMatrix(a.Width, a.Height);
+            var result = new RealMatrix(a.Width, a.Height);
             for (int i = 0; i < a.Height; i++)
                 for (int j = 0; j < a.Width; j++)
                     result[i, j] = a[i, j] - b[i, j];
@@ -67,12 +68,12 @@ namespace MatrixOperations.BL
             return result;
         }
 
-        public static IntMatrix operator *(IntMatrix a, IntMatrix b)
+        public static RealMatrix operator *(RealMatrix a, RealMatrix b)
         {
             if (a.Width != b.Height)
                 throw new ArgumentException("Ширина первой матрицы должна совпадать с высотой второй");
 
-            var result = new IntMatrix(b.Width, a.Height);
+            var result = new RealMatrix(b.Width, a.Height);
             for (int i = 0; i < result.Height; i++)
                 for (int j = 0; j < result.Width; j++)
                     for (int k = 0; k < a.Width; k++)
@@ -81,9 +82,9 @@ namespace MatrixOperations.BL
             return result;
         }
 
-        public static IntMatrix operator *(IntMatrix a, int b)
+        public static RealMatrix operator *(RealMatrix a, double b)
         {
-            var result = new IntMatrix(a.Width, a.Height);
+            var result = new RealMatrix(a.Width, a.Height);
             for (int i = 0; i < result.Height; i++)
                 for (int j = 0; j < result.Width; j++)
                     result[i, j] = a[i, j] * b;
@@ -91,23 +92,23 @@ namespace MatrixOperations.BL
             return result;
         }
 
-        public static IntMatrix operator *(int a, IntMatrix b)
+        public static RealMatrix operator *(double a, RealMatrix b)
         {
             return b * a;
         }
 
-        public int GetAlgebraicComplement(int x, int y)
+        public double GetAlgebraicComplement(int x, int y)
         {
             var isPowerEven = (x + y) % 2 == 0;
             return GetMinor(x, y).Determinant * (isPowerEven ? 1 : -1);
         }
 
-        public IntMatrix GetMatrixOfAlgebraicComplement()
+        public RealMatrix GetMatrixOfAlgebraicComplement()
         {
-            var result = new IntMatrix(Width, Height);
-            for (int i = 0; i < Height; i++)
+            var result = new RealMatrix(Width, Height);
+            for(int i = 0; i < Height; i++)
             {
-                for (int j = 0; j < Width; j++)
+                for(int j = 0; j < Width; j++)
                 {
                     result[i, j] = GetAlgebraicComplement(j, i);
                 }
@@ -115,12 +116,12 @@ namespace MatrixOperations.BL
             return result;
         }
 
-        public IntMatrix GetMinor(int x, int y)
+        public RealMatrix GetMinor(int x, int y)
         {
             if (Width != Height)
                 throw new ArgumentException("Минор можно найти только у квадратной матрицы");
 
-            var elements = new List<int>();
+            var elements = new List<double>();
             for (int i = 0; i < Height; i++)
             {
                 for (int j = 0; j < Width; j++)
@@ -129,7 +130,7 @@ namespace MatrixOperations.BL
                         elements.Add(this[i, j]);
                 }
             }
-            return new IntMatrix(Width - 1, Height - 1, elements);
+            return new RealMatrix(Width - 1, Height - 1, elements);
         }
     }
 }
