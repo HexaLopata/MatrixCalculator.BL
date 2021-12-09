@@ -4,6 +4,7 @@ using System.Text;
 
 namespace MatrixOperations.BL
 {
+
     public class RealMatrix : Matrix<double>
     {
         public RealMatrix Inversed
@@ -12,7 +13,7 @@ namespace MatrixOperations.BL
             {
                 var det = Determinant;
                 if (det == 0)
-                    throw new ArgumentException("Обратной матрицы не существует, если определитель равен 0");
+                    throw new ArgumentException("There is no inverse matrix if the determinant is 0");
                 return (1 / det) * new RealMatrix(GetMatrixOfAlgebraicComplement().Transposed);
             }
         }
@@ -22,7 +23,7 @@ namespace MatrixOperations.BL
             get
             {
                 if (Width != Height)
-                    throw new ArgumentException("Определитель можно найти только у квадратной матрицы");
+                    throw new ArgumentException("The determinant can only be found in a square matrix");
                 if (Width == 1)
                     return this[0, 0];
 
@@ -45,7 +46,7 @@ namespace MatrixOperations.BL
         public static RealMatrix operator +(RealMatrix a, RealMatrix b)
         {
             if (a.Height != b.Height || a.Width != b.Width)
-                throw new ArgumentException("Размеры матриц должны совпадать");
+                throw new ArgumentException("The sizes of the matrices must match");
 
             var result = new RealMatrix(a.Width, a.Height);
             for (int i = 0; i < a.Height; i++)
@@ -58,7 +59,7 @@ namespace MatrixOperations.BL
         public static RealMatrix operator -(RealMatrix a, RealMatrix b)
         {
             if (a.Height != b.Height || a.Width != b.Width)
-                throw new ArgumentException("Размеры матриц должны совпадать");
+                throw new ArgumentException("The sizes of the matrices must match");
 
             var result = new RealMatrix(a.Width, a.Height);
             for (int i = 0; i < a.Height; i++)
@@ -71,7 +72,7 @@ namespace MatrixOperations.BL
         public static RealMatrix operator *(RealMatrix a, RealMatrix b)
         {
             if (a.Width != b.Height)
-                throw new ArgumentException("Ширина первой матрицы должна совпадать с высотой второй");
+                throw new ArgumentException("The width of the first matrix must match the height of the second matrix");
 
             var result = new RealMatrix(b.Width, a.Height);
             for (int i = 0; i < result.Height; i++)
@@ -106,9 +107,9 @@ namespace MatrixOperations.BL
         public RealMatrix GetMatrixOfAlgebraicComplement()
         {
             var result = new RealMatrix(Width, Height);
-            for(int i = 0; i < Height; i++)
+            for (int i = 0; i < Height; i++)
             {
-                for(int j = 0; j < Width; j++)
+                for (int j = 0; j < Width; j++)
                 {
                     result[i, j] = GetAlgebraicComplement(j, i);
                 }
@@ -119,7 +120,7 @@ namespace MatrixOperations.BL
         public RealMatrix GetMinor(int x, int y)
         {
             if (Width != Height)
-                throw new ArgumentException("Минор можно найти только у квадратной матрицы");
+                throw new ArgumentException("A minor can only be found in a square matrix");
 
             var elements = new List<double>();
             for (int i = 0; i < Height; i++)
